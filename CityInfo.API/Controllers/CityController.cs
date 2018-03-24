@@ -9,12 +9,23 @@ namespace CityInfo.API.Controllers
     [Route("api/cities")]
     public class CityController : Controller
     {
+        // There is no NotFound, because an empty collection is also a valid response. 
         [HttpGet()]
-        public JsonResult GetCities()
-            => new JsonResult(CitiesDataStore.Current.Cities);
+        public IActionResult GetCities()
+            => Ok(CitiesDataStore.Current.Cities); 
+
 
         [HttpGet("{id}")]
-        public JsonResult GetSingleCity(int id)
-            => new JsonResult(CitiesDataStore.Current.Cities.SingleOrDefault(x => x.Id == id));
+        public IActionResult GetSingleCity(int id)
+        {
+            var city = CitiesDataStore.Current.Cities.SingleOrDefault(x => x.Id == id);
+
+            if(city == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(city);
+        }
     }
 }

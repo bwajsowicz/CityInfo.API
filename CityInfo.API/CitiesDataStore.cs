@@ -20,19 +20,64 @@ namespace CityInfo.API
                 {
                     Id = 1,
                     Name = "Warsaw",
-                    Description = "Capital of Poland."
+                    Description = "Capital of Poland.",
+                    PointsOfInterests = new List<PointsOfInterestDTO>()
+                    {
+                        new PointsOfInterestDTO()
+                        {
+                            Id = 1,
+                            Name = "Warsaw Rising Museum",
+                            Description = "Museum"
+                        },
+                        new PointsOfInterestDTO()
+                        {
+                            Id = 2,
+                            Name = "PGE National Stadium ",
+                            Description = "Statium"
+                        }
+                    }
                 },
                 new CityDTO()
                 {
                     Id = 2,
                     Name = "Berlin",
-                    Description = "Capital of Germany."
+                    Description = "Capital of Germany.",
+                    PointsOfInterests = new List<PointsOfInterestDTO>()
+                    {
+                        new PointsOfInterestDTO()
+                        {
+                            Id = 3,
+                            Name = "Brandenburg Gate",
+                            Description = "Monument"
+                        },
+                        new PointsOfInterestDTO()
+                        {
+                            Id = 4,
+                            Name = "Checkpoint Charlie",
+                            Description = "Historic Site"
+                        }
+                    }
                 },
                 new CityDTO()
                 {
                     Id = 3,
-                    Name = "Praga",
-                    Description = "Capital of Czech Republic."
+                    Name = "Prague",
+                    Description = "Capital of Czech Republic.",
+                     PointsOfInterests = new List<PointsOfInterestDTO>()
+                    {
+                        new PointsOfInterestDTO()
+                        {
+                            Id = 5,
+                            Name = "Prague Castle",
+                            Description = "Castle"
+                        },
+                        new PointsOfInterestDTO()
+                        {
+                            Id = 6,
+                            Name = "Charles Bridge",
+                            Description = "Bridge"
+                        }
+                    }
                 },
             };
         }
