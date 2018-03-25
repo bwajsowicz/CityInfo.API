@@ -14,7 +14,6 @@ namespace CityInfo.API.Controllers
         public IActionResult GetCities()
             => Ok(CitiesDataStore.Current.Cities); 
 
-
         [HttpGet("{id}")]
         public IActionResult GetSingleCity(int id)
         {
