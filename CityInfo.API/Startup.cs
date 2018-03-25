@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
+using FluentValidation.AspNetCore;
 
 namespace CityInfo.API
 {
@@ -16,7 +17,7 @@ namespace CityInfo.API
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
                /*.AddJsonOptions(x =>
                 {
                     if(x.SerializerSettings.ContractResolver != null)
