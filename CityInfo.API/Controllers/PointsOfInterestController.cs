@@ -44,7 +44,7 @@ namespace CityInfo.API.Controllers
                 return BadRequest();
 
             if (!ModelState.IsValid)
-               return BadRequest(ModelState);
+                return BadRequest(ModelState);
 
             if (pointOfInterest.Name == pointOfInterest.Description)
                 ModelState.AddModelError("Description", "Description should be different from the name.");
@@ -71,6 +71,38 @@ namespace CityInfo.API.Controllers
                 cityId = cityId,
                 pointOfInterestId = finalPointOfInterest.Id
             }, finalPointOfInterest);
+        }
+
+        [HttpPut("{cityId}/pointsofinterest/{pointOfInterestId}")]
+        public IActionResult UpdatePointOfInterest(int cityId, int pointOfInterestId,
+            [FromBody] PointsOfInterestForUpdateDTO pointOfInterest)
+        {
+            // FluentValidation might help.
+
+            if (pointOfInterest == null)
+                return BadRequest();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (pointOfInterest.Name == pointOfInterest.Description)
+                ModelState.AddModelError("Description", "Description should be different from the name.");
+
+            var city = CitiesDataStore.Current.Cities.SingleOrDefault(x => x.Id == cityId);
+
+            if (city == null)
+                return NotFound();
+
+            var pointOfInterestFromDataSore = city.PointsOfInterests.SingleOrDefault(x =>
+            x.Id == pointOfInterestId);
+
+            if (pointOfInterestFromDataSore == null)
+                return NotFound();
+
+            pointOfInterestFromDataSore.Name = pointOfInterest.Name;
+            pointOfInterestFromDataSore.Description = pointOfInterest.Description;
+
+            return NoContent();
         }
     }
 }
