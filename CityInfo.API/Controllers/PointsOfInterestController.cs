@@ -1,4 +1,5 @@
 ﻿using CityInfo.API.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -40,9 +41,6 @@ namespace CityInfo.API.Controllers
         public IActionResult CreatePointOfInterest(int cityId,
             [FromBody] PointsOfInterestForCreationDTO pointOfInterest)
         {
-            if (pointOfInterest == null)
-                return BadRequest();
-
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -74,16 +72,8 @@ namespace CityInfo.API.Controllers
         public IActionResult UpdatePointOfInterest(int cityId, int pointOfInterestId,
             [FromBody] PointsOfInterestForUpdateDTO pointOfInterest)
         {
-            // FluentValidation might help.
-
-            if (pointOfInterest == null)
-                return BadRequest();
-
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
-            if (pointOfInterest.Name == pointOfInterest.Description)
-                ModelState.AddModelError("Description", "Description should be different from the name.");
 
             var city = CitiesDataStore.Current.Cities.SingleOrDefault(x => x.Id == cityId);
 
@@ -98,6 +88,40 @@ namespace CityInfo.API.Controllers
 
             pointOfInterestFromDataSore.Name = pointOfInterest.Name;
             pointOfInterestFromDataSore.Description = pointOfInterest.Description;
+
+            return NoContent();
+        }
+
+        [HttpPatch("{cityId}/pointsofinterest/{pointOfInterestId}")]
+        public IActionResult PartiallyUpdatePointOfInterest(int cityId, int pointOfInterestId,
+            [FromBody] JsonPatchDocument<PointsOfInterestForUpdateDTO> patchDoc)
+        {
+            if (patchDoc == null)
+                return BadRequest(ModelState);
+
+            var city = CitiesDataStore.Current.Cities.SingleOrDefault(x => x.Id == cityId);
+
+            if (city == null)
+                return NotFound();
+
+            var pointOfInterest = city.PointsOfInterests.SingleOrDefault(x => x.Id == pointOfInterestId);
+
+            if (pointOfInterest == null)
+                return NotFound();
+
+            var pointOfInterestToUpdate = new PointsOfInterestForUpdateDTO()
+            {
+                Name = pointOfInterest.Name,
+                Description = pointOfInterest.Description
+            };
+
+            patchDoc.ApplyTo(pointOfInterestToUpdate, ModelState);
+
+            if(!ModelState.IsValid)
+                return BadRequest();
+
+            pointOfInterest.Name = pointOfInterestToUpdate.Name;
+            pointOfInterest.Description = pointOfInterest.Description;
 
             return NoContent();
         }
