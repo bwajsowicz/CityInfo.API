@@ -120,6 +120,8 @@ namespace CityInfo.API.Controllers
             if(!ModelState.IsValid)
                 return BadRequest();
 
+            TryValidateModel(pointOfInterestToUpdate);
+
             pointOfInterest.Name = pointOfInterestToUpdate.Name;
             pointOfInterest.Description = pointOfInterest.Description;
 
