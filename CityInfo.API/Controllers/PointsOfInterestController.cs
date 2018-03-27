@@ -127,5 +127,23 @@ namespace CityInfo.API.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("{cityId}/pointsofinterest/{pointOfInterestId}")]
+        public IActionResult DeletePointOfInterest(int cityId, int pointOfInterestId)
+        {
+            var city = CitiesDataStore.Current.Cities.SingleOrDefault(x => x.Id == cityId);
+
+            if (city == null)
+                return NotFound();
+
+            var pointOfInterestToRemove = city.PointsOfInterests.SingleOrDefault(x => x.Id == pointOfInterestId);
+
+            if (pointOfInterestToRemove == null)
+                return NotFound();
+
+            city.PointsOfInterests.Remove(pointOfInterestToRemove);
+
+            return NoContent();
+        }
     }
 }
